@@ -1,0 +1,53 @@
+﻿@page "/produtos"
+
+@using BlazorDapperProdutos.Data
+@using BlazorDapperProdutos.Services
+
+@inject IProdutoService produtoService
+
+<h3>Produtos</h3>
+<p><a href="/novoproduto">Incluir produto</a></p>
+@if (produtos == null)
+{
+        <h1>Loading...</h1>
+}
+else
+{
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Estoque</th>
+                    <th>Preço</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var produto in produtos)
+            {
+                        <tr>
+                            <td>@produto.nome</td>
+                            <td>@produto.descricao</td>
+                            <td>@produto.estoque</td>
+                            <td>@produto.preco</td>
+                            <td>
+                                <a href='editaproduto/@produto.produtoid'>Editar</a>
+                                <a href='deletaproduto/@produto.produtoid'>Excluir</a>
+                            </td>
+                        </tr>
+            }
+            </tbody>
+        </table>
+
+}
+
+@code {
+    IEnumerable<Produto> produtos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        produtos = await produtoService.ListAll();
+
+    }
+}

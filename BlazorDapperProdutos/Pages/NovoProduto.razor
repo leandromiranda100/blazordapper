@@ -1,0 +1,56 @@
+﻿@page "/novoproduto"
+
+@using BlazorDapperProdutos.Data
+@using BlazorDapperProdutos.Services
+
+@inject NavigationManager NavigationManager
+@inject IProdutoService produtoService
+
+<h2>Cadastro de novo produto</h2>
+<hr/>
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="nome" class="control-label">Nome</label>
+                <input for="nome" class="form-control" @bind="@produto.nome"/>
+            </div>
+            <div class="form-group">
+                <label for="descricao" class="control-label">Descrição</label>
+                <input for="descricao" class="form-control" @bind="@produto.descricao" />
+            </div>
+            <div class="form-group">
+                <label for="estoque" class="control-label">Estoque</label>
+                <input for="estoque" class="form-control" @bind="@produto.estoque" />
+            </div>
+            <div class="form-group">
+                <label for="preco" class="control-label">Preço</label>
+                <input for="preco" class="form-control" @bind="@produto.preco" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" @onclick="@CriaProduto" value="Salvar" />
+                    <input type="button" class="btn btn-link" @onclick="@Cancela" value="Cancelar" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@code
+{
+    Produto produto = new Produto();
+
+    protected async Task CriaProduto()
+    {
+        await produtoService.Create(produto);
+        NavigationManager.NavigateTo("produtos");
+    }
+
+    void Cancela()
+    {
+        NavigationManager.NavigateTo("produtos");
+    }
+}

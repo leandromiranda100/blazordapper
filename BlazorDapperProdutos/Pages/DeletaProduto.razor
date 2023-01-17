@@ -1,0 +1,63 @@
+﻿@page "/deletaproduto/{id:int}"
+
+@using BlazorDapperProdutos.Data
+@using BlazorDapperProdutos.Services
+
+@inject NavigationManager NavigationManager
+@inject IProdutoService produtoService
+
+<h2>Exclusão de produto</h2>
+<hr />
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="nome" class="control-label">Nome</label>
+                @produto.nome
+            </div>
+            <div class="form-group">
+                <label for="descricao" class="control-label">Descrição</label>
+                @produto.descricao
+            </div>
+            <div class="form-group">
+                <label for="estoque" class="control-label">Estoque</label>
+                @produto.estoque
+            </div>
+            <div class="form-group">
+                <label for="preco" class="control-label">Preço</label>
+                @produto.preco
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="button" class="btn btn-primary" @onclick="@Deleta" value="Excluir" />
+                    <input type="button" class="btn btn-link" @onclick="@Cancela" value="Cancelar" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@code
+{
+    [Parameter]
+    public int id { get; set; }
+
+    Produto produto = new Produto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        produto = await produtoService.GetById(id);
+    }
+
+    protected async Task Deleta()
+    {
+        await produtoService.Delete(id);
+        NavigationManager.NavigateTo("produtos");
+    }
+
+    void Cancela()
+    {
+        NavigationManager.NavigateTo("produtos");
+    }
+}
